@@ -5,10 +5,12 @@
 import joblib
 import pandas as pd
 
-
-def predict(input):
-    row_dict = {k:[v] for k, v in dict(input).items()}
-    data = pd.DataFrame(row_dict)
+def predict(inputs):
+    inputs = dict(inputs)
+    
+    for k in inputs.keys():
+        inputs[k] = [inputs[k]]
+    data = pd.DataFrame(inputs)
     
     # Load and unpack the model
     artifacts = joblib.load("artifacts_rf_better.joblib")
@@ -18,7 +20,7 @@ def predict(input):
     enc = artifacts["enc"]
     model = artifacts["model"]
     
-    data = data[num_features + cat_features]
+    data = data[cat_features + num_features]
     
     # Apply imputer, scaler and encoder on data
     data_cat = enc.transform(data[cat_features])

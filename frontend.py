@@ -13,16 +13,14 @@ OriginalSaleAmountInclVAT = st.number_input("OriginalSaleAmountInclVAT")
 Day = st.selectbox("Day", values["day"])
 Month = st.selectbox("Month", values["month"])
 
-
-# fetch api when button is clicked
 if st.button("Predict!"):
     inputs = {
         "Shop": int(Shop),
         "BrandName": int(BrandName),
         "ModelGroup": int(ModelGroup),
         "ProductGroup": int(ProductGroup),
-        "day": Day,
-        "month": Month,
+        "day": str(Day),
+        "month": str(Month),
         "OriginalSaleAmountInclVAT": float(OriginalSaleAmountInclVAT),
     }
     
@@ -33,6 +31,6 @@ if st.button("Predict!"):
             prediction = response_data["pred"]
             st.subheader(f"Return?: {prediction}")
         else:
-            st.error(f"Error: {r.text}")
+            st.error(f"Status code: {r.status_code} Error: {r.text}")
     except Exception as e:
         st.error(f"Error: {str(e)}")
