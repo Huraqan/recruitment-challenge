@@ -6,11 +6,18 @@ import joblib
 import pandas as pd
 
 def predict(inputs):
-    inputs = dict(inputs)
+    # inputs = dict(inputs)
+        
+    # for k in inputs.keys():
+    #     inputs[k] = [inputs[k]]
+    # data = pd.DataFrame(inputs)
     
-    for k in inputs.keys():
-        inputs[k] = [inputs[k]]
-    data = pd.DataFrame(inputs)
+    print("\n", inputs)
+    print(type(inputs))
+    
+    data = pd.DataFrame([inputs.dict()])
+    
+    print("\nDATAFRAME CREATED\n")
     
     # Load and unpack the model
     artifacts = joblib.load("artifacts_rf_better.joblib")
@@ -22,8 +29,12 @@ def predict(inputs):
     
     data = data[cat_features + num_features]
     
+    print("\nMODEL LOADED\n")
+    
     # Apply imputer, scaler and encoder on data
     data_cat = enc.transform(data[cat_features])
+    
+    print("\nDATA TRANSFORMED\n")
     
     # Combine the numerical and one-hot encoded categorical columns
     data = pd.concat(
@@ -33,6 +44,11 @@ def predict(inputs):
         ],
         axis=1,
     )
+    
+    print("\nDATA RECOMBINED\n")
+    
+    print(data, "\n")
+    print(data.dtypes, "\n")
     
     prediction = {"pred": model.predict(data)[0]}
     return prediction
